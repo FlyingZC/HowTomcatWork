@@ -1,0 +1,88 @@
+====================================================
+一.处理静态资源的server
+基于socket,读取输入流,安装http标准解析.创建response,以流写到客户端
+
+使用:启动HttpServer,浏览器访问http://localhost:9080/1.html
+
+====================================================
+二.处理Servlet类资源 请求 的server
+http://localhost:9080/servlet/PrimitiveServlet
+这种servlet请求,交由ServletProcessor处理,该类会使用URLClassLoader
+类加载器,去加载Servlet类,并调用其service方法
+
+使用：请求http://localhost:9080/servlet/PrimitiveServlet,
+通过HttpService->ServletProcessor(处理servlet请求)->调用具体的如PrimitiveServlet.service()方法,输出内容
+
+使用RequestFacade门面封装Request对象
+javax.servlet.ServletRequest
+--ServletFacade
+--Request
+
+RequestFacade 和 Request 均实现 ServletRequest接口.且RequestFacade是Request的门面,持有Request对象并转调其方法(暴露出需要暴露的部分).
+当servlet.service((ServletRequest) requestFacade, (ServletResponse) responseFacade);需要向上造型成ServletRequest对象.
+此时用户可以再次强转成RequestFacade对象,却不能强转成Request对象,安全
+
+====================================================
+三.连接器
+使用
+http://localhost:9080/servlet/ModernServlet?userName=zz&password=pwdval
+1.Catalina中两个模块:connector(连接器) 和  container(容器)
+
+2.连接器:创建javax.servlet.http.HttpServletRequest对象 和 HttpServletResponse对象,
+并将它们作为servlet的service方法的参数传入.
+由于连接器无法得知最终调用的用户的servlet实现了javax.servlet.Servlet接口还是继承自javax.servlet.GenericServlet类
+或javax.servlet.http.HttpServlet类,所以连接器总会提供HttpServletRequest和HttpServletResponse实例
+(规范,当然它可以向上造型成Servlet或GenericServlet)
+
+本章,连接器可1.解析HTTP请求头,cookie和请求参数/值
+
+3.org.apache.catalina.util.StringManager类
+用于处理应用程序中不同模块 和 Catalina本身中错误消息的国际化操作
+
+Tomcat将错误消息存储在一个properties文件中,便于读取和编辑.
+Tomcat将properties文件划分到不同的包中.每个包都由一个StringManager的实例进行处理(包内共享).
+每个实例会读取指定包下的properties文件.
+
+4.按模块划分
+连接器模块: 
+    --连接器及其支持类 HttpConnector, HttpProcessor
+    --表示HTTP请求的类 HttpRequest
+    --表示HTTP响应的类 HttpRequest
+    --外观类 HttpRequestFacade, HttpResponseFacade
+    --常量类
+启动模块:Bootstrap
+核心模块:ServletProcessor, StaticResourceProcessor
+
+5.之前由HttpServer类负责1.等待HTTP请求, 并2.创建Request和Response对象
+现在由HttpConnector等待HTTP请求,HttpProcessor负责创建Request和Response对象
+
+6.解析HTTP请求
+1)读取套接字的输入流
+2)解析请求行
+3)解析请求头
+4)解析Cookie
+5)获取参数
+
+7.请求行可能出现的两种方式
+请求行包括:1.请求方法 2.请求的URI(可能还包含queryString) 3.HTTP版本信息
+GET /servlet/Modernservlet?userName=zz&password=pwdval HTTP/1.1
+或
+GET http://www.myAPP.com/ModernServlet?userName=zz&psw=11 HTTP/1.1
+
+8.Cookie请求头示例   Cookie: userName=zc; psw=11;
+
+9.请求参数的解析
+在HttpRequest类中,只解析一次
+GET请求,请求参数出现在 查询字符串中
+POST请求,请求体中也会有请求参数
+
+可通过getParameterMap()获取所有请求参数key-value对,但是不可修改其值.
+org.apache.catalina.util.ParameterMap
+
+
+
+
+
+
+
+
