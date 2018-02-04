@@ -39,7 +39,7 @@ import org.apache.catalina.util.URL;
  * @author Craig R. McClanahan
  * @author Remy Maucherat
  * @version $Revision: 1.54 $ $Date: 2002/04/05 18:43:12 $
- * @deprecated
+ * 
  */
 
 public class HttpResponseBase
@@ -945,7 +945,7 @@ public class HttpResponseBase
      *
      * @param url URL to be encoded
      *
-     * @deprecated As of Version 2.1 of the Java Servlet API, use
+     *  As of Version 2.1 of the Java Servlet API, use
      *  <code>encodeRedirectURL()</code> instead.
      */
     public String encodeRedirectUrl(String url) {
@@ -978,7 +978,7 @@ public class HttpResponseBase
      *
      * @param url URL to be encoded
      *
-     * @deprecated As of Version 2.1 of the Java Servlet API, use
+     *  As of Version 2.1 of the Java Servlet API, use
      *  <code>encodeURL()</code> instead.
      */
     public String encodeUrl(String url) {
@@ -1178,7 +1178,7 @@ public class HttpResponseBase
      * @param status The new HTTP status
      * @param message The associated text message
      *
-     * @deprecated As of Version 2.1 of the Java Servlet API, this method
+     *  As of Version 2.1 of the Java Servlet API, this method
      *  has been deprecated due to the ambiguous meaning of the message
      *  parameter.
      */

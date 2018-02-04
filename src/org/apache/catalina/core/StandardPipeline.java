@@ -82,7 +82,7 @@ import org.apache.catalina.util.LifecycleSupport;
 import org.apache.catalina.util.StringManager;
 
 
-/**
+/**标准 管道 实现类
  * Standard implementation of a processing <b>Pipeline</b> that will invoke
  * a series of Valves that have been configured to be called in order.  This
  * implementation can be used for any type of Container.
@@ -631,7 +631,7 @@ public class StandardPipeline
          */
         public void invokeNext(Request request, Response response)
             throws IOException, ServletException {
-
+            // 当前正在调用的阀
             int subscript = stage;
             stage = stage + 1;
 

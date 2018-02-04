@@ -70,7 +70,7 @@ import javax.servlet.ServletException;
 import javax.servlet.UnavailableException;
 
 
-/**
+/**管理基础servlet类的生命周期
  * A <b>Wrapper</b> is a Container that represents an individual servlet
  * definition from the deployment descriptor of the web application.  It
  * provides a convenient mechanism to use Interceptors that see every single

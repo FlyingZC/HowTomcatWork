@@ -39,7 +39,7 @@ import org.apache.catalina.util.RequestUtil;
  *
  * @author Craig R. McClanahan
  * @version $Revision: 1.39 $ $Date: 2002/04/22 00:00:50 $
- * @deprecated
+ * 
  */
 
 public class HttpRequestBase
@@ -1160,7 +1160,7 @@ public class HttpRequestBase
      * Return <code>true</code> if the session identifier included in this
      * request came from the request URI.
      *
-     * @deprecated As of Version 2.1 of the Java Servlet API, use
+     *  As of Version 2.1 of the Java Servlet API, use
      *  <code>isRequestedSessionIdFromURL()</code> instead.
      */
     public boolean isRequestedSessionIdFromUrl() {

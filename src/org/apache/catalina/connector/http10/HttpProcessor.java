@@ -101,7 +101,7 @@ import org.apache.catalina.util.StringManager;
  *
  * @author Craig R. McClanahan
  * @version $Revision: 1.9 $ $Date: 2002/04/04 17:50:34 $
- * @deprecated
+ * 
  */
 
 final class HttpProcessor

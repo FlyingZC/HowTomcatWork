@@ -16,7 +16,7 @@ import org.apache.catalina.util.Enumerator;
  * @author Craig R. McClanahan
  * @author Remy Maucherat
  * @version $Revision: 1.13 $ $Date: 2002/03/18 07:15:40 $
- * @deprecated
+ * 
  */
 
 final class HttpRequestImpl
@@ -55,7 +55,7 @@ final class HttpRequestImpl
 
 
     /**
-     * Headers pool.
+     * Headers pool.默认存储header的数组,大小默认为10
      */
     protected HttpHeader[] headerPool = new HttpHeader[INITIAL_POOL_SIZE];
 
@@ -183,7 +183,7 @@ final class HttpRequestImpl
      *
      * @param name The new header name
      * @param value The new header value
-     * @deprecated Don't use
+     *  Don't use
      */
     public void addHeader(String name, String value) {
 
@@ -339,7 +339,7 @@ final class HttpRequestImpl
      * Return the names of all headers received with this request.
      */
     public Enumeration getHeaderNames() {
-        ArrayList tempArrayList = new ArrayList();
+        ArrayList tempArrayList = new ArrayList();//将解析出来的header中的name存入arrayList,并返回枚举对象
         for (int i = 0; i < nextHeader; i++) {
             tempArrayList.add(new String(headerPool[i].name, 0,
                                          headerPool[i].nameEnd));

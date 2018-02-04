@@ -76,7 +76,7 @@ import org.apache.catalina.HttpResponse;
  *
  * @author Craig R. McClanahan
  * @version $Revision: 1.4 $ $Date: 2002/03/18 07:15:39 $
- * @deprecated
+ * 
  */
 
 public abstract class HttpResponseWrapper

@@ -10,31 +10,39 @@ import org.apache.catalina.ValveContext;
 import org.apache.catalina.Contained;
 import org.apache.catalina.Container;
 
+/**
+ * @author flyingzc
+ * 一个额外的阀,用于 将客户端的IP地址输出到控制台
+ */
+public class ClientIPLoggerValve implements Valve, Contained
+{
 
-public class ClientIPLoggerValve implements Valve, Contained {
+    protected Container container;
 
-  protected Container container;
+    public void invoke(Request request, Response response, ValveContext valveContext)
+            throws IOException, ServletException
+    {
 
-  public void invoke(Request request, Response response, ValveContext valveContext)
-    throws IOException, ServletException {
+        // Pass this request on to the next valve in our pipeline
+        valveContext.invokeNext(request, response);
+        System.out.println("Client IP Logger Valve");
+        ServletRequest sreq = request.getRequest();
+        System.out.println(sreq.getRemoteAddr());
+        System.out.println("------------------------------------");
+    }
 
-    // Pass this request on to the next valve in our pipeline
-    valveContext.invokeNext(request, response);
-    System.out.println("Client IP Logger Valve");
-    ServletRequest sreq = request.getRequest();
-    System.out.println(sreq.getRemoteAddr());
-    System.out.println("------------------------------------");
-  }
+    public String getInfo()
+    {
+        return null;
+    }
 
-  public String getInfo() {
-    return null;
-  }
+    public Container getContainer()
+    {
+        return container;
+    }
 
-  public Container getContainer() {
-    return container;
-  }
-
-  public void setContainer(Container container) {
-    this.container = container;
-  }
+    public void setContainer(Container container)
+    {
+        this.container = container;
+    }
 }

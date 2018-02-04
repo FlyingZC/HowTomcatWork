@@ -7,13 +7,15 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.security.AccessControlException;
-import java.util.Stack;
-import java.util.Vector;
+import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
-import java.security.cert.CertificateException;
 import java.security.UnrecoverableKeyException;
-import java.security.KeyManagementException;
+import java.security.cert.CertificateException;
+import java.util.Stack;
+import java.util.Vector;
+
+import org.apache.GlobalConstants;
 import org.apache.catalina.Connector;
 import org.apache.catalina.Container;
 import org.apache.catalina.Lifecycle;
@@ -35,7 +37,6 @@ import org.apache.catalina.util.StringManager;
  * @author Craig R. McClanahan
  * @author Remy Maucherat
  * @version $Revision: 1.34 $ $Date: 2002/03/18 07:15:39 $
- * @deprecated
  */
 
 
@@ -83,7 +84,7 @@ public final class HttpConnector
     private Vector created = new Vector();
 
 
-    /**
+    /**当前创建的processor数量
      * The current number of processors that have been created.
      */
     private int curProcessors = 0;
@@ -101,7 +102,7 @@ public final class HttpConnector
     private boolean enableLookups = false;
 
 
-    /**
+    /**ServerSocket工厂,用于获取ServerSocket
      * The server socket factory for this component.
      */
     private ServerSocketFactory factory = null;
@@ -120,13 +121,13 @@ public final class HttpConnector
     protected LifecycleSupport lifecycle = new LifecycleSupport(this);
 
 
-    /**
+    /**httpProcessor池的最小数
      * The minimum number of processors to start at initialization time.
      */
     protected int minProcessors = 5;
 
 
-    /**
+    /**httpProcessor池的最大数
      * The maximum number of processors allowed, or <0 for unlimited.
      */
     private int maxProcessors = 20;
@@ -142,10 +143,10 @@ public final class HttpConnector
     /**
      * The port number on which we listen for HTTP requests.
      */
-    private int port = 8080;
+    private int port = GlobalConstants.PORT;
 
 
-    /**
+    /**HttpConnector(本类) 维护一个HttpProcessor实例池,避免每次都为新请求创建HttpProcessor对象
      * The set of processors that have been created but are not currently
      * being used to process a request.
      */
@@ -762,7 +763,7 @@ public final class HttpConnector
     // -------------------------------------------------------- Package Methods
 
 
-    /**
+    /**回收指定的processor，以便它可以再次使用。
      * Recycle the specified Processor so that it can be used again.
      *
      * @param processor The processor to be recycled
@@ -779,7 +780,8 @@ public final class HttpConnector
     // -------------------------------------------------------- Private Methods
 
 
-    /**
+    /**返回httpProcessor对象,先从池中取.若1.栈(池)中有processor实例可以使用则弹出返回该实例.
+     * 2.若栈已空,而processor数量还未达到设定的max值则继续创建processor.3.若已达到最大值,返回null,服务器会关闭套接字不处理这个请求
      * Create (or allocate) and return an available processor for use in
      * processing a specific HTTP request, if possible.  If the maximum
      * allowed processors have already been created and are in use, return
@@ -787,7 +789,7 @@ public final class HttpConnector
      */
     private HttpProcessor createProcessor() {
 
-        synchronized (processors) {
+        synchronized (processors) {//多个线程来取,加锁
             if (processors.size() > 0) {
                 // if (debug >= 2)
                 // log("createProcessor: Reusing existing processor");
@@ -864,7 +866,7 @@ public final class HttpConnector
         HttpProcessor processor = new HttpProcessor(this, curProcessors++);
         if (processor instanceof Lifecycle) {
             try {
-                ((Lifecycle) processor).start();
+                ((Lifecycle) processor).start();// 启动processor线程
             } catch (LifecycleException e) {
                 log("newProcessor", e);
                 return (null);
@@ -876,7 +878,7 @@ public final class HttpConnector
     }
 
 
-    /**
+    /**返回ServerSocket实例
      * Open and return the server socket for this Connector.  If an IP
      * address has been specified, the socket will be opened only on that
      * address; otherwise it will be opened on all addresses.
@@ -898,7 +900,7 @@ public final class HttpConnector
            KeyManagementException
     {
 
-        // Acquire the server socket factory for this Connector
+        // Acquire the server socket factory for this Connector 获取ServerSocket
         ServerSocketFactory factory = getFactory();
 
         // If no address is specified, open a connection on all addresses
@@ -936,7 +938,7 @@ public final class HttpConnector
     // ---------------------------------------------- Background Thread Methods
 
 
-    /**
+    /** 监听传入的TCP/IP连接  的后台线程,把它们交给合适的processor处理
      * The background thread that listens for incoming TCP/IP connections and
      * hands them off to an appropriate processor.
      */
@@ -998,7 +1000,7 @@ public final class HttpConnector
 
                 continue;
             }
-
+            // 获取processor对象来处理HTTP请求
             // Hand this socket off to an appropriate processor
             HttpProcessor processor = createProcessor();
             if (processor == null) {
@@ -1012,7 +1014,7 @@ public final class HttpConnector
             }
             //            if (debug >= 3)
             //                log("run: Assigning socket to processor " + processor);
-            processor.assign(socket);
+            processor.assign(socket);// 若有processor处理,调用assign方法,从当前的connector线程中调用.调用之后就可以告知前面的
 
             // The processor will recycle itself when it finishes
 
@@ -1028,7 +1030,7 @@ public final class HttpConnector
     }
 
 
-    /**
+    /**启动connector线程,用于监听http请求
      * Start the background processing thread.
      */
     private void threadStart() {
@@ -1098,7 +1100,7 @@ public final class HttpConnector
     }
 
 
-    /**
+    /**boostrap启动时调用,只调用一次.建立socket连接
      * Initialize this connector (create ServerSocket here!)
      */
     public void initialize()
@@ -1110,8 +1112,8 @@ public final class HttpConnector
         this.initialized=true;
         Exception eRethrow = null;
 
-        // Establish a server socket on the specified port
-        try {
+        // Establish a server socket on the specified port 建立serverSocket
+        try {// !!建立socket连接,整个方法只做了这一件事情-_-!
             serverSocket = open();
         } catch (IOException ioe) {
             log("httpConnector, io problem: ", ioe);
@@ -1156,13 +1158,13 @@ public final class HttpConnector
 
         // Start our background thread
         threadStart();
-
+        // 根据minProcessors的值 和 maxProcessors的值来创建HttpProcessor对象.若请求数目超出processor数目,则继续创建processor,直到达到max值.再多余的请求则被忽略    
         // Create the specified minimum number of processors
-        while (curProcessors < minProcessors) {
-            if ((maxProcessors > 0) && (curProcessors >= maxProcessors))
+        while (curProcessors < minProcessors) {//创建一定数据的processor并推入池中
+            if ((maxProcessors > 0) && (curProcessors >= maxProcessors))//超出最大值的请求不处理
                 break;
-            HttpProcessor processor = newProcessor();
-            recycle(processor);
+            HttpProcessor processor = newProcessor();//创建processor对象的同时,会启动processor的线程
+            recycle(processor);//创建processor,推入栈(池)中
         }
 
     }

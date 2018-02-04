@@ -16,7 +16,7 @@ import org.apache.catalina.util.StringManager;
  *
  * @author Craig R. McClanahan
  * @version $Revision: 1.6 $ $Date: 2002/03/18 07:15:39 $
- * @deprecated
+ * 
  */
 
 public class ResponseStream

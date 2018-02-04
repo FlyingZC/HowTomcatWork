@@ -909,7 +909,7 @@ class StandardSession
     /**
      * Return the session context with which this session is associated.
      *
-     * @deprecated As of Version 2.1, this method is deprecated and has no
+     *  As of Version 2.1, this method is deprecated and has no
      *  replacement.  It will be removed in a future version of the
      *  Java Servlet API.
      */
@@ -976,7 +976,7 @@ class StandardSession
      * @exception IllegalStateException if this method is called on an
      *  invalidated session
      *
-     * @deprecated As of Version 2.2, this method is replaced by
+     *  As of Version 2.2, this method is replaced by
      *  <code>getAttribute()</code>
      */
     public Object getValue(String name) {
@@ -993,7 +993,7 @@ class StandardSession
      * @exception IllegalStateException if this method is called on an
      *  invalidated session
      *
-     * @deprecated As of Version 2.2, this method is replaced by
+     *  As of Version 2.2, this method is replaced by
      *  <code>getAttributeNames()</code>
      */
     public String[] getValueNames() {
@@ -1061,7 +1061,7 @@ class StandardSession
      * @exception IllegalStateException if this method is called on an
      *  invalidated session
      *
-     * @deprecated As of Version 2.2, this method is replaced by
+     *  As of Version 2.2, this method is replaced by
      *  <code>setAttribute()</code>
      */
     public void putValue(String name, Object value) {
@@ -1188,7 +1188,7 @@ class StandardSession
      * @exception IllegalStateException if this method is called on an
      *  invalidated session
      *
-     * @deprecated As of Version 2.2, this method is replaced by
+     *  As of Version 2.2, this method is replaced by
      *  <code>removeAttribute()</code>
      */
     public void removeValue(String name) {
@@ -1560,7 +1560,7 @@ class StandardSession
  *
  * @author Craig R. McClanahan
  *
- * @deprecated As of Java Servlet API 2.1 with no replacement.  The
+ *  As of Java Servlet API 2.1 with no replacement.  The
  *  interface will be removed in a future version of this API.
  */
 
@@ -1573,7 +1573,7 @@ final class StandardSessionContext implements HttpSessionContext {
      * Return the session identifiers of all sessions defined
      * within this context.
      *
-     * @deprecated As of Java Servlet API 2.1 with no replacement.
+     *  As of Java Servlet API 2.1 with no replacement.
      *  This method must return an empty <code>Enumeration</code>
      *  and will be removed in a future version of the API.
      */
@@ -1590,7 +1590,7 @@ final class StandardSessionContext implements HttpSessionContext {
      *
      * @param id Session identifier for which to look up a session
      *
-     * @deprecated As of Java Servlet API 2.1 with no replacement.
+     *  As of Java Servlet API 2.1 with no replacement.
      *  This method must return null and will be removed in a
      *  future version of the API.
      */

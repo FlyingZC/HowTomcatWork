@@ -14,48 +14,60 @@ import org.apache.catalina.ValveContext;
 import org.apache.catalina.Contained;
 import org.apache.catalina.Container;
 
+/**
+ * @author flyingzc
+ * 一个基础阀
+ */
+public class SimpleWrapperValve implements Valve, Contained
+{
 
-public class SimpleWrapperValve implements Valve, Contained {
+    protected Container container;
+    
+    public void invoke(Request request, Response response, ValveContext valveContext)
+            throws IOException, ServletException
+    {
 
-  protected Container container;
+        SimpleWrapper wrapper = (SimpleWrapper) getContainer();
+        ServletRequest sreq = request.getRequest();
+        ServletResponse sres = response.getResponse();
+        Servlet servlet = null;
+        HttpServletRequest hreq = null;
+        if (sreq instanceof HttpServletRequest)
+            hreq = (HttpServletRequest) sreq;
+        HttpServletResponse hres = null;
+        if (sres instanceof HttpServletResponse)
+            hres = (HttpServletResponse) sres;
 
-  public void invoke(Request request, Response response, ValveContext valveContext)
-    throws IOException, ServletException {
-
-    SimpleWrapper wrapper = (SimpleWrapper) getContainer();
-    ServletRequest sreq = request.getRequest();
-    ServletResponse sres = response.getResponse();
-    Servlet servlet = null;
-    HttpServletRequest hreq = null;
-    if (sreq instanceof HttpServletRequest)
-      hreq = (HttpServletRequest) sreq;
-    HttpServletResponse hres = null;
-    if (sres instanceof HttpServletResponse)
-      hres = (HttpServletResponse) sres;
-
-    // Allocate a servlet instance to process this request
-    try {
-      servlet = wrapper.allocate();
-      if (hres!=null && hreq!=null) {
-        servlet.service(hreq, hres);
-      }
-      else {
-        servlet.service(sreq, sres);
-      }
+        // Allocate a servlet instance to process this request
+        try
+        {
+            servlet = wrapper.allocate();
+            if (hres != null && hreq != null)
+            {
+                servlet.service(hreq, hres);
+            }
+            else
+            {
+                servlet.service(sreq, sres);
+            }
+        }
+        catch (ServletException e)
+        {
+        }
     }
-    catch (ServletException e) {
+
+    public String getInfo()
+    {
+        return null;
     }
-  }
 
-  public String getInfo() {
-    return null;
-  }
+    public Container getContainer()
+    {
+        return container;
+    }
 
-  public Container getContainer() {
-    return container;
-  }
-
-  public void setContainer(Container container) {
-    this.container = container;
-  }
+    public void setContainer(Container container)
+    {
+        this.container = container;
+    }
 }

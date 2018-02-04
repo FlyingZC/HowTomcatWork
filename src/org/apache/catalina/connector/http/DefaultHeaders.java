@@ -1,12 +1,12 @@
 package org.apache.catalina.connector.http;
 
 
-/**
+/**HTTP请求默认会带的请求头 和 请求体 名 常量
  * HTTP default headers and header names.
  *
  * @author Remy Maucherat
  * @version $Revision: 1.3 $ $Date: 2002/03/18 07:15:39 $
- * @deprecated
+ * 
  */
 
 final class DefaultHeaders {

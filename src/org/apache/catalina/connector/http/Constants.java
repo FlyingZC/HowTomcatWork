@@ -4,7 +4,7 @@ package org.apache.catalina.connector.http;
 /**
  * Static constants for this package.
  *
- * @deprecated
+ * 
  */
 public final class Constants {
 

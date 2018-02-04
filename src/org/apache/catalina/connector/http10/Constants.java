@@ -68,7 +68,7 @@ package org.apache.catalina.connector.http10;
 /**
  * Static constants for this package.
  * 
- * @deprecated
+ * 
  */
 
 public final class Constants {

@@ -65,7 +65,7 @@
 package org.apache.catalina;
 
 
-/**
+/**维护每个实现了该接口的 每个Catalina组件的生命周期
  * Common interface for component life cycle methods.  Catalina components
  * may, but are not required to, implement this interface (as well as the
  * appropriate interface(s) for the functionality they support) in order to

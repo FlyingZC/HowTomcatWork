@@ -34,7 +34,6 @@ import org.apache.catalina.util.StringManager;
  *
  * @author Craig R. McClanahan
  * @version $Revision: 1.21 $ $Date: 2002/08/26 12:15:58 $
- * @deprecated
  */
 
 public abstract class RequestBase
@@ -861,7 +860,7 @@ public abstract class RequestBase
      *
      * @param path Path to be translated
      *
-     * @deprecated As of version 2.1 of the Java Servlet API, use
+     *  As of version 2.1 of the Java Servlet API, use
      *  <code>ServletContext.getRealPath()</code>.
      */
     public String getRealPath(String path) {

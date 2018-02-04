@@ -60,7 +60,7 @@ public interface Connector {
     // ------------------------------------------------------------- Properties
 
 
-    /**
+    /**返回与当前连接器相关联的servlet容器
      * Return the Container used for processing requests received by this
      * Connector.
      */
@@ -69,7 +69,7 @@ public interface Connector {
 
     /**
      * Set the Container used for processing requests received by this
-     * Connector.
+     * Connector.将连接器 和 摸个servlet容器相关联
      *
      * @param container The new Container to use
      */
@@ -175,14 +175,14 @@ public interface Connector {
     // --------------------------------------------------------- Public Methods
 
 
-    /**
+    /**为引入的HTTP请求创建request对象
      * Create (or allocate) and return a Request object suitable for
      * specifying the contents of a Request to the responsible Container.
      */
     public Request createRequest();
 
 
-    /**
+    /**为引入的HTTP请求创建response对象
      * Create (or allocate) and return a Response object suitable for
      * receiving the contents of a Response from the responsible Container.
      */

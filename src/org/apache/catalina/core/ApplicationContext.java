@@ -740,7 +740,7 @@ public class ApplicationContext
 
 
     /**
-     * @deprecated As of Java Servlet API 2.1, with no direct replacement.
+     *  As of Java Servlet API 2.1, with no direct replacement.
      */
     public Servlet getServlet(String name) {
 
@@ -760,7 +760,7 @@ public class ApplicationContext
 
 
     /**
-     * @deprecated As of Java Servlet API 2.1, with no direct replacement.
+     *  As of Java Servlet API 2.1, with no direct replacement.
      */
     public Enumeration getServletNames() {
 
@@ -770,7 +770,7 @@ public class ApplicationContext
 
 
     /**
-     * @deprecated As of Java Servlet API 2.1, with no direct replacement.
+     *  As of Java Servlet API 2.1, with no direct replacement.
      */
     public Enumeration getServlets() {
 
@@ -809,7 +809,7 @@ public class ApplicationContext
      * @param exception Exception to be reported
      * @param message Message to be written
      *
-     * @deprecated As of Java Servlet API 2.1, use
+     *  As of Java Servlet API 2.1, use
      *  <code>log(String, Throwable)</code> instead
      */
     public void log(Exception exception, String message) {

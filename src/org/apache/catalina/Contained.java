@@ -65,7 +65,7 @@
 package org.apache.catalina;
 
 
-/**
+/**阀可以选择是否实现该接口,该接口的实现类可以通过接口中的方法 至多 与 一个servlet容器关联
  * <p>Decoupling interface which specifies that an implementing class is
  * associated with at most one <strong>Container</strong> instance.</p>
  *

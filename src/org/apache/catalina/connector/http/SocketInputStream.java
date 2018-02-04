@@ -10,7 +10,7 @@ import org.apache.catalina.util.StringManager;
  * header processing.
  *
  * @author <a href="mailto:remm@apache.org">Remy Maucherat</a>
- * @deprecated
+ * 
  */
 public class SocketInputStream extends InputStream {
 
@@ -308,7 +308,7 @@ public class SocketInputStream extends InputStream {
             pos--;
         }
 
-        // Reading the header name
+        // Reading the header name 解析请求头中的name
 
         int maxRead = header.name.length;
         int readStart = pos;
@@ -339,11 +339,11 @@ public class SocketInputStream extends InputStream {
                 pos = 0;
                 readStart = 0;
             }
-            if (buf[pos] == COLON) {
+            if (buf[pos] == COLON) { //当读取到 : 冒号时,代表当前解析的name结束了,跳出循环,往下解析value
                 colon = true;
             }
             char val = (char) buf[pos];
-            if ((val >= 'A') && (val <= 'Z')) {
+            if ((val >= 'A') && (val <= 'Z')) {// 将大写统一转成小写字符
                 val = (char) (val - LC_OFFSET);
             }
             header.name[readCount] = val;
@@ -353,7 +353,7 @@ public class SocketInputStream extends InputStream {
 
         header.nameEnd = readCount - 1;
 
-        // Reading the header value (which can be spanned over multiple lines)
+        // Reading the header value (which can be spanned over multiple lines)解析请求头中的value
 
         maxRead = header.value.length;
         readStart = pos;
@@ -368,7 +368,7 @@ public class SocketInputStream extends InputStream {
 
             boolean space = true;
 
-            // Skipping spaces
+            // Skipping spaces 跳过所有空格,包含 空格( ) 或 tab(\t)
             // Note : Only leading white spaces are removed. Trailing white
             // spaces are not.
             while (space) {
@@ -389,7 +389,7 @@ public class SocketInputStream extends InputStream {
                     space = false;
                 }
             }
-
+            //解析value
             while (!eol) {
                 // if the buffer is full, extend it
                 if (readCount >= maxRead) {
@@ -416,10 +416,10 @@ public class SocketInputStream extends InputStream {
                     readStart = 0;
                 }
                 if (buf[pos] == CR) {
-                } else if (buf[pos] == LF) {
+                } else if (buf[pos] == LF) {// 遇到\n结束循环
                     eol = true;
                 } else {
-                    // FIXME : Check if binary conversion is working fine
+                    // FIXME : Check if binary conversion is working fine 检查二进制转换是否正常
                     int ch = buf[pos] & 0xff;
                     header.value[readCount] = (char) ch;
                     readCount++;

@@ -2,19 +2,21 @@ package org.apache.catalina.connector.http;
 
 
 import java.io.EOFException;
-import java.io.InterruptedIOException;
-import java.io.InputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InterruptedIOException;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.TreeMap;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.apache.catalina.Globals;
 import org.apache.catalina.HttpRequest;
 import org.apache.catalina.Lifecycle;
@@ -29,7 +31,7 @@ import org.apache.catalina.util.StringManager;
 import org.apache.catalina.util.StringParser;
 
 
-/**
+/**实现了Runnable接口,每个HttpProcessor实例 就可以运行在自己的线程中了
  * Implementation of a request processor (and its associated thread) that may
  * be used by an HttpConnector to process individual requests.  The connector
  * will allocate a processor from its pool, assign a particular socket to it,
@@ -39,7 +41,7 @@ import org.apache.catalina.util.StringParser;
  * @author Craig R. McClanahan
  * @author Remy Maucherat
  * @version $Revision: 1.46 $ $Date: 2002/04/04 17:50:34 $
- * @deprecated
+ * 
  */
 
 final class HttpProcessor
@@ -59,7 +61,7 @@ final class HttpProcessor
     // ----------------------------------------------------------- Constructors
 
 
-    /**
+    /**processor(本类)的构造函数 会 调用 connector中的createRequest() 和 createResponse()方法
      * Construct a new HttpProcessor associated with the specified connector.
      *
      * @param connector HttpConnector that owns this processor
@@ -73,8 +75,8 @@ final class HttpProcessor
         this.id = id;
         this.proxyName = connector.getProxyName();
         this.proxyPort = connector.getProxyPort();
-        this.request = (HttpRequestImpl) connector.createRequest();
-        this.response = (HttpResponseImpl) connector.createResponse();
+        this.request = (HttpRequestImpl) connector.createRequest();// createRequest
+        this.response = (HttpResponseImpl) connector.createResponse();// createResponse
         this.serverPort = connector.getPort();
         this.threadName =
           "HttpProcessor[" + connector.getPort() + "][" + id + "]";
@@ -282,7 +284,8 @@ final class HttpProcessor
      * <b>NOTE</b>:  This method is called from our Connector's thread.  We
      * must assign it to our own thread so that multiple simultaneous
      * requests can be handled.
-     *
+     * 处理在指定的套接字上传入的TCP/IP连接。任何在处理过程中发生的异常必须被记录和catch。
+     * 这个方法是被 [连接器的线程] 中调用的。我们必须将它分配给我们自己的线程以便同时可以处理多个请求。
      * @param socket TCP socket to process
      */
     synchronized void assign(Socket socket) {
@@ -478,7 +481,7 @@ final class HttpProcessor
     }
 
 
-    /**
+    /** 解析http连接,这里只获取了主机ip
      * Parse and record the connection parameters related to this request.
      *
      * @param socket The socket on which we are connected
@@ -492,8 +495,9 @@ final class HttpProcessor
         if (debug >= 2)
             log("  parseConnection: address=" + socket.getInetAddress() +
                 ", port=" + connector.getPort());
+        // 从套接字中获取Internet地址,将其赋值给HttpRequestImpl对象
         ((HttpRequestImpl) request).setInet(socket.getInetAddress());
-        if (proxyPort != 0)
+        if (proxyPort != 0)// 是否使用代理
             request.setServerPort(proxyPort);
         else
             request.setServerPort(serverPort);
@@ -502,7 +506,7 @@ final class HttpProcessor
     }
 
 
-    /**
+    /**解析请求头,解析类似于Content-Type:text/html;charset=utf-8  其中name:value
      * Parse the incoming HTTP request headers, and set the appropriate
      * request headers.
      *
@@ -515,10 +519,10 @@ final class HttpProcessor
         throws IOException, ServletException {
 
         while (true) {
-
+            // 获取一个空的请求头,在之后填充
             HttpHeader header = request.allocateHeader();
 
-            // Read the next header
+            // Read the next header 读取一个header兵填充
             input.readHeader(header);
             if (header.nameEnd == 0) {
                 if (header.valueEnd == 0) {
@@ -534,7 +538,7 @@ final class HttpProcessor
                 log(" Header " + new String(header.name, 0, header.nameEnd)
                     + " = " + value);
 
-            // Set the corresponding request headers
+            // Set the corresponding request headers 设置相应的请求头,请求头中的name一般都是固定的(都定义在DefaultHeaders中了),将对应name的value设置到request对象中
             if (header.equals(DefaultHeaders.AUTHORIZATION_NAME)) {
                 request.setAuthorization(value);
             } else if (header.equals(DefaultHeaders.ACCEPT_LANGUAGE_NAME)) {
@@ -574,7 +578,7 @@ final class HttpProcessor
                 request.setContentLength(n);
             } else if (header.equals(DefaultHeaders.CONTENT_TYPE_NAME)) {
                 request.setContentType(value);
-            } else if (header.equals(DefaultHeaders.HOST_NAME)) {
+            } else if (header.equals(DefaultHeaders.HOST_NAME)) {// 设置host
                 int n = value.indexOf(':');
                 if (n < 0) {
                     if (connector.getScheme().equals("http")) {
@@ -594,7 +598,7 @@ final class HttpProcessor
                     if (proxyPort != 0)
                         request.setServerPort(proxyPort);
                     else {
-                        int port = 80;
+                        int port = 80;// 默认端口号为80
                         try {
                             port =
                                 Integer.parseInt(value.substring(n+1).trim());
@@ -603,7 +607,7 @@ final class HttpProcessor
                                 (sm.getString
                                  ("httpProcessor.parseHeaders.portNumber"));
                         }
-                        request.setServerPort(port);
+                        request.setServerPort(port);// 设置serverPort
                     }
                 }
             } else if (header.equals(DefaultHeaders.CONNECTION_NAME)) {
@@ -629,14 +633,14 @@ final class HttpProcessor
                 //request.setTransferEncoding(header);
             }
 
-            request.nextHeader();
+            request.nextHeader();//获取下一个空的请求头,然后循环填充
 
         }
 
     }
 
 
-    /**
+    /**解析请求行.获取所有协议,可为HTTP0.9,HTTP1.0,HTTP1.1,若值为1.0,将keepAlive设为false(不支持持久连接)
      * Parse the incoming HTTP request and set the corresponding HTTP request
      * properties.
      *
@@ -876,8 +880,8 @@ final class HttpProcessor
      * @param socket The socket on which we are connected to the client
      */
     private void process(Socket socket) {
-        boolean ok = true;
-        boolean finishResponse = true;
+        boolean ok = true;// 处理过程中是否有错误发生
+        boolean finishResponse = true;// 表示是否应该调用response接口的finishResponse()方法
         SocketInputStream input = null;
         OutputStream output = null;
 
@@ -890,13 +894,13 @@ final class HttpProcessor
             ok = false;
         }
 
-        keepAlive = true;
-
-        while (!stopped && ok && keepAlive) {
+        keepAlive = true;// 是否是持久连接
+        // stopped:表名HttpProcessor实例是否被连接器终止,若终止则process()方法也应该停止
+        while (!stopped && ok && keepAlive) {// 循环读取输入流
 
             finishResponse = true;
 
-            try {
+            try {// 执行request和response的一些初始化操作
                 request.setStream(input);
                 request.setResponse(response);
                 output = socket.getOutputStream();
@@ -913,14 +917,14 @@ final class HttpProcessor
             // Parse the incoming request
             try {
                 if (ok) {
-
+                    // 解析HTTP请求
                     parseConnection(socket);
-                    parseRequest(input, output);
+                    parseRequest(input, output);// 解析请求行
                     if (!request.getRequest().getProtocol()
                         .startsWith("HTTP/0"))
-                        parseHeaders(input);
+                        parseHeaders(input);// 解析请求头
                     if (http11) {
-                        // Sending a request acknowledge back to the client if
+                        // Sending a request acknowledge back to the client if 如果需要，将请求发送回客户端。????
                         // requested.
                         ackRequest(output);
                         // If the protocol is HTTP/1.1, chunking is allowed.
@@ -968,7 +972,7 @@ final class HttpProcessor
             try {
                 ((HttpServletResponse) response).setHeader
                     ("Date", FastHttpDateFormat.getCurrentDate());
-                if (ok) {
+                if (ok) {// !!!调用invoke方法
                     connector.getContainer().invoke(request, response);
                 }
             } catch (ServletException e) {
@@ -994,7 +998,7 @@ final class HttpProcessor
             }
 
             // Finish up the handling of the request
-            if (finishResponse) {
+            if (finishResponse) {// 调用response对象的finishResponse方法将结果发送到客户端
                 try {
                     response.finishResponse();
                 } catch (IOException e) {
@@ -1028,7 +1032,7 @@ final class HttpProcessor
 
             // End of request processing
             status = Constants.PROCESSOR_IDLE;
-
+            // 回收request 和 response对象    
             // Recycling the request and the response objects
             request.recycle();
             response.recycle();
@@ -1049,7 +1053,7 @@ final class HttpProcessor
 
     }
 
-
+    /**关闭套接字,若有未读完的会跳过这些字节*/
     protected void shutdownInput(InputStream input) {
         try {
             int available = input.available();
@@ -1066,7 +1070,7 @@ final class HttpProcessor
     // ---------------------------------------------- Background Thread Methods
 
 
-    /**
+    /**1.获取套接字进行处理;2.调用连接器的recycle()将当前的HttpProcessor实例压回栈中.
      * The background thread that listens for incoming TCP/IP connections and
      * hands them off to an appropriate processor.
      */
@@ -1082,12 +1086,12 @@ final class HttpProcessor
 
             // Process the request from this socket
             try {
-                process(socket);
+                process(socket);// !!!处理请求
             } catch (Throwable t) {
                 log("process.invoke", t);
             }
 
-            // Finish up this request
+            // Finish up this request 处理完后将当前processor对象压回栈中
             connector.recycle(this);
 
         }
@@ -1100,7 +1104,7 @@ final class HttpProcessor
     }
 
 
-    /**
+    /**启动 后台守护线程
      * Start the background processing thread.
      */
     private void threadStart() {
