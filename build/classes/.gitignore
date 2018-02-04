@@ -1,5 +1,3 @@
-/SessionServlet.class
-/SimpleContextConfig.class
 /com/
 /ex01/
 /ex02/
@@ -19,4 +17,8 @@
 /ex20/
 /note_howTomcatWorks.txt
 /org/
+/ModernServlet.class
+/PrimitiveServlet.class
+/SessionServlet.class
+/SimpleContextConfig.class
 /test/

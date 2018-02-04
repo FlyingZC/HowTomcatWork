@@ -501,7 +501,7 @@ public class SocketInputStream extends InputStream
     {
         if (pos >= count)
         {
-            fill();
+            fill();//填充
             if (pos >= count)
                 return -1;
         }

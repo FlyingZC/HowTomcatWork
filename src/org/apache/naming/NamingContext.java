@@ -65,6 +65,7 @@
 package org.apache.naming;
 
 import java.util.Hashtable;
+import java.util.Vector;
 import java.util.Enumeration;
 import javax.naming.Context;
 import javax.naming.Name;
@@ -377,7 +378,7 @@ public class NamingContext implements Context {
         while ((!name.isEmpty()) && (name.get(0).length() == 0))
             name = name.getSuffix(1);
         if (name.isEmpty()) {
-            return new NamingContextEnumeration(bindings.elements());
+            return new NamingContextEnumeration((Vector) bindings.elements());// zc modify
         }
         
         NamingEntry entry = (NamingEntry) bindings.get(name.get(0));
@@ -429,7 +430,7 @@ public class NamingContext implements Context {
         while ((!name.isEmpty()) && (name.get(0).length() == 0))
             name = name.getSuffix(1);
         if (name.isEmpty()) {
-            return new NamingContextBindingsEnumeration(bindings.elements());
+            return new NamingContextBindingsEnumeration((Vector) bindings.elements());// zc modify
         }
         
         NamingEntry entry = (NamingEntry) bindings.get(name.get(0));

@@ -79,6 +79,13 @@ POST请求,请求体中也会有请求参数
 可通过getParameterMap()获取所有请求参数key-value对,但是不可修改其值.
 org.apache.catalina.util.ParameterMap
 
+====================================================
+四.Tomcat的默认连接器
+1.让项目中的org.apache包下的代码不报错
+下载tomcat4,将lib下build到本工程中
+再修复剩余的错误
+
+2.
 
 
 

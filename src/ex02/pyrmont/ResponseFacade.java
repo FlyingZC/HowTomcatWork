@@ -3,8 +3,9 @@ package ex02.pyrmont;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Locale;
-import javax.servlet.ServletResponse;
+
 import javax.servlet.ServletOutputStream;
+import javax.servlet.ServletResponse;
 
 public class ResponseFacade implements ServletResponse
 {
@@ -79,20 +80,6 @@ public class ResponseFacade implements ServletResponse
     public void setLocale(Locale locale)
     {
         response.setLocale(locale);
-    }
-
-    @Override
-    public String getContentType()
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public void setCharacterEncoding(String arg0)
-    {
-        // TODO Auto-generated method stub
-
     }
 
 }

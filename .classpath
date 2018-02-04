@@ -1,17 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk1.8.0_101">
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk1.6.0_37">
 		<attributes>
 			<attribute name="owner.project.facets" value="java"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="con" path="org.eclipse.jst.server.core.container/org.eclipse.jst.server.tomcat.runtimeTarget/Apache Tomcat v7.0">
-		<attributes>
-			<attribute name="owner.project.facets" value="jst.web"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/activation.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/ant-launcher.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/ant.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/commons-beanutils.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/commons-collections-3.2.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/commons-collections.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/commons-daemon.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/commons-dbcp-1.2.2.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/commons-digester.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/commons-logging-api-1.1.1.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/commons-logging.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/commons-modeler.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/commons-pool-1.4.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jaas.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jakarta-regexp-1.2.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jasper-compiler.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jasper-runtime.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jcert.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jdbc2_0-stdext.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jnet.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jsse.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jta.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/mail.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/mx4j.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/naming-common.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/naming-factory.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/naming-resources.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/servlet.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/tomcat-util.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/xercesImpl.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/xmlParserAPIs.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
