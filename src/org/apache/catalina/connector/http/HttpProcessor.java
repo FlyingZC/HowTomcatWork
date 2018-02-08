@@ -522,7 +522,7 @@ final class HttpProcessor
             // 获取一个空的请求头,在之后填充
             HttpHeader header = request.allocateHeader();
 
-            // Read the next header 读取一个header兵填充
+            // Read the next header 读取一个header并填充
             input.readHeader(header);
             if (header.nameEnd == 0) {
                 if (header.valueEnd == 0) {

@@ -855,7 +855,7 @@ public final class HttpConnector
     }
 
 
-    /**
+    /**创建processor对象并启动该线程
      * Create and return a new processor suitable for processing HTTP
      * requests and returning the corresponding responses.
      */
@@ -1141,7 +1141,7 @@ public final class HttpConnector
     }
 
 
-    /**
+    /**启动connector线程,创建processor线程池
      * Begin processing requests via this Connector.
      *
      * @exception LifecycleException if a fatal startup error occurs

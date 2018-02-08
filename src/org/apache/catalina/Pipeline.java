@@ -120,7 +120,7 @@ public interface Pipeline {
     // --------------------------------------------------------- Public Methods
 
 
-    /**
+    /** 将一个新的 阀value 添加到管道pipeline尾部
      * <p>Add a new Valve to the end of the pipeline associated with this
      * Container.  Prior to adding the Valve, the Valve's
      * <code>setContainer()</code> method will be called, if it implements

@@ -24,12 +24,14 @@ import org.apache.catalina.Wrapper;
 
 /**
  * 一个简单的wrapper实现,管理servlet的生命周期,
- * 调用其init(),service(),destroy()等方法
+ * 调用其init(),service(),destroy()等方法.
+ * 包含一个loader实例加载servlet类
+ * 包含一个pipeline(管道),该管道包含一个基础阀(simpleWrapperValue) 和 其他几个阀  
  * */
 public class SimpleWrapper implements Wrapper, Pipeline
 {
 
-    // the servlet instance
+    // the servlet instance 一个Wrapper对应一个Servlet实例
     private Servlet instance = null;
 
     private String servletClass;
@@ -37,13 +39,13 @@ public class SimpleWrapper implements Wrapper, Pipeline
     private Loader loader;
 
     private String name;
-    // 管道
+    // 管道 ,一个Wrapper有一个管道
     private SimplePipeline pipeline = new SimplePipeline(this);
 
     protected Container parent = null;
 
     public SimpleWrapper()
-    {
+    {   // 基础阀,此处传入的 是一个SimpleWrapperValue对象
         pipeline.setBasic(new SimpleWrapperValve());
     }
 
@@ -52,7 +54,7 @@ public class SimpleWrapper implements Wrapper, Pipeline
         pipeline.addValve(valve);
     }
 
-    /**分配一个已经初始化的servlet实例*/
+    /**分配一个已经初始化的servlet实例,单例*/
     public Servlet allocate() throws ServletException
     {
         // Load and initialize our instance if necessary
@@ -73,7 +75,7 @@ public class SimpleWrapper implements Wrapper, Pipeline
         }
         return instance;
     }
-
+    /**通过loader去创建servlet实例,并调用init方法*/
     private Servlet loadServlet() throws ServletException
     {
         if (instance != null)
@@ -117,7 +119,7 @@ public class SimpleWrapper implements Wrapper, Pipeline
             throw new ServletException("Failed to instantiate servlet");
         }
 
-        // Call the initialization method of this servlet
+        // Call the initialization method of this servlet,!!!全程 只 调用一次 用户servlet的init方法
         try
         {
             servlet.init(null);

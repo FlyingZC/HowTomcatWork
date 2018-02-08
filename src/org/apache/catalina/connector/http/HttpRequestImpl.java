@@ -149,7 +149,7 @@ final class HttpRequestImpl
     }
 
 
-    /**
+    /**分配一个空的header在后续解析中进行填充.从Headers pool中取
      * Allocate new header.
      *
      * @return an HttpHeader buffer allocated from the pool

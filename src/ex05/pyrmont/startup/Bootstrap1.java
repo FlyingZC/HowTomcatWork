@@ -26,7 +26,7 @@ public final class Bootstrap1
         Valve valve2 = new ClientIPLoggerValve();
 
         wrapper.setLoader(loader);
-        ((Pipeline) wrapper).addValve(valve1);// SimpleWrapper实现了Wrapper和Pipeline接口
+        ((Pipeline) wrapper).addValve(valve1);// SimpleWrapper实现了Wrapper和Pipeline接口,将阀添加到管道里
         ((Pipeline) wrapper).addValve(valve2);
 
         connector.setContainer(wrapper);

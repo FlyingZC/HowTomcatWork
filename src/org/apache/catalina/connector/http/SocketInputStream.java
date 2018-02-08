@@ -298,7 +298,7 @@ public class SocketInputStream extends InputStream {
 
         // Checking for a blank line
         int chr = read();
-        if ((chr == CR) || (chr == LF)) { // Skipping CR
+        if ((chr == CR) || (chr == LF)) { // Skipping CR 读到\r或\n,代表请求头header解析完毕,则将header中的nameEnd标记和valueEnd标记置为0,外部调用时循环结束
             if (chr == CR)
                 read(); // Skipping LF
             header.nameEnd = 0;

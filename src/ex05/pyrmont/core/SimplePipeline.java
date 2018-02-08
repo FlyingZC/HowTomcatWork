@@ -15,9 +15,9 @@ import org.apache.catalina.ValveContext;
  * */
 public class SimplePipeline implements Pipeline
 {
-
+    
     public SimplePipeline(Container container)
-    {
+    {// 管道外面的容器
         setContainer(container);
     }
 
@@ -54,7 +54,7 @@ public class SimplePipeline implements Pipeline
             ((Contained) valve).setContainer(this.container);
 
         synchronized (valves)
-        {
+        {// 每次 values阀值数组 都扩容加1
             Valve results[] = new Valve[valves.length + 1];
             System.arraycopy(valves, 0, results, 0, valves.length);
             results[valves.length] = valve;
@@ -94,14 +94,14 @@ public class SimplePipeline implements Pipeline
 
         public void invokeNext(Request request, Response response) throws IOException, ServletException
         {
-            int subscript = stage;
-            stage = stage + 1;
+            int subscript = stage;//阀下标索引,从0开始
+            stage = stage + 1;//阀 个数索引,从1开始
             // Invoke the requested Valve for the current request thread
             if (subscript < valves.length)
-            {
+            {// !!!调用阀.invoke方法,传入当前的this(即SimplePipeline对象,用于贯穿调用整个管道中的阀数组)
                 valves[subscript].invoke(request, response, this);
             }
-            else if ((subscript == valves.length) && (basic != null))
+            else if ((subscript == valves.length) && (basic != null))// 最后调用 基础阀(位于管道中阀的结尾)
             {
                 basic.invoke(request, response, this);
             }
